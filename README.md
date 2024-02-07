@@ -16,18 +16,17 @@ The course is based on the textbook *Statistical Rethinking* (2nd edition, 2020)
 
 | Course week | Week of year | Topics and readings                                                     |
 |:-----------:|:------------:|:------------------------------------------------------------------------|
-| 1           | 6            | Statistical models (chapters 1, 2)                                      |
-| 2           | 7            | Distributions and sampling (chapters 2, 3)                              |
-| 3           | 8            | Gaussian models and linear regression (chapters 3, 4)                   |
-| 4           | 10           | Model specification, total and direct effects, splines (chapter 4)      |
-| 5           | 11           | Directed acyclic graphs (chapter 5)                                     |
-| 6           | 13           | Causal inference (chapter 6)                                            |
-| 7           | 15           | Model comparison, interactions (chapters 7, 8)                          |
-| 8           | 16           | Markov chain Monte Carlo, maximum entropy (chapters 9, 10)              |
-| 9           | 17           | Generalized linear models (chapter 11)                                  |
-| 10          | 18           | Mixture models, ordered categorical outcomes/predictors (chapter 12)    |
-| 11a         | 19           | Multilevel models (chapter 13) [only lecture]                           |
-| 11b         | 21           | Multilevel models (chapter 13) [only class]                             |
+| 1           | 7            | Statistical models (chapters 1, 2)                                      |
+| 2           | 8            | Distributions and sampling (chapters 2, 3)                              |
+| 3           | 10           | Gaussian models and linear regression (chapters 3, 4)                   |
+| 4           | 11           | Model specification, total and direct effects, splines (chapter 4)      |
+| 5           | 14           | Directed acyclic graphs (chapter 5)                                     |
+| 6           | 15           | Causal inference (chapter 6)                                            |
+| 7           | 16           | Model comparison, interactions (chapters 7, 8)                          |
+| 8           | 17           | Markov chain Monte Carlo, maximum entropy (chapters 9, 10)              |
+| 9           | 18           | Generalized linear models (chapter 11)                                  |
+| 10          | 19           | Mixture models, ordered categorical outcomes/predictors (chapter 12)    |
+| 11          | 20           | Multilevel models (chapter 13)                                          |
 
 ## Flipped classroom
 
@@ -44,8 +43,8 @@ In order for us to stay in contact, ask questions, and have discussions, there i
 consisting of a mix of text and code.
 
 - Due
-  1. End of week 10 (Sunday 12 March, 23:59)
-  2. End of week 15 (Sunday 16 April, 23:59)
-  3. End of week 18 (Sunday 7 May, 23:59)
+  1. End of week 11 (Sunday 17 March, 23:59)
+  2. End of week 16 (Sunday 21 April, 23:59)
+  3. End of week 19 (Sunday 12 May, 23:59)
 
 You will receive a (short) feedback message from us on your portfolio assignments that you can use for improvements before finalizing your hand-ins.
