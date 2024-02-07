@@ -1,0 +1,183 @@
+---
+title: 'Methods 4: Assignments Week 8'
+output:
+  html_document:
+    df_print: paged
+---
+
+
+### Problems from Chapter 9 of *Statistical Rethinking*.
+
+```{r, message = FALSE}
+## Setup
+library(rethinking)
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+set_ulam_cmdstan(TRUE)
+```
+
+
+#### Problem 9M1
+
+Load and preprocess the data.
+
+```{r}
+# load data
+data(rugged)
+d <- rugged
+
+# make log version of outcome
+d$log_gdp <- log( d$rgdppc_2000 )
+
+# extract countries with GDP data
+dd <- d[ complete.cases(d$rgdppc_2000) , ]
+
+# rescale variables
+dd$log_gdp_std <- dd$log_gdp / mean(dd$log_gdp)
+dd$rugged_std <- dd$rugged / max(dd$rugged)
+
+# make variable to index Africa (1) or not (2)
+dd$cid <- ifelse( dd$cont_africa==1 , 1 , 2 )
+
+# slim down to what we need
+dat_slim <- dd[,c("log_gdp_std", "rugged_std", "cid")]
+```
+
+Fit the model.
+
+```{r, warning = FALSE, message = FALSE}
+me9.1 <- ulam(
+    alist(
+        log_gdp_std ~ dnorm( mu , sigma ) ,
+        mu <- a[cid] + b[cid]*( rugged_std - 0.215 ) ,
+        a[cid] ~ dnorm( 1 , 0.1 ) ,
+        b[cid] ~ dnorm( 0 , 0.3 ) ,
+        sigma ~ dexp( 1 )
+    ) , data = dat_slim, chains = 4, cores = 4, refresh = 0)
+
+precis( me9.1 , depth=2 )
+```
+
+Change the prior on $\sigma$.
+
+```{r, warning = FALSE, message = FALSE}
+me9.2 <- ulam(
+    alist(
+        log_gdp_std ~ dnorm( mu , sigma ) ,
+        mu <- a[cid] + b[cid]*( rugged_std - 0.215 ) ,
+        a[cid] ~ dnorm( 1 , 0.1 ) ,
+        b[cid] ~ dnorm( 0 , 0.3 ) ,
+        sigma ~ dunif( 0, 1 )
+    ) , data = dat_slim, chains = 4, cores = 4, refresh = 0)
+
+precis( me9.2 , depth=2 )
+```
+
+The new prior contains almost all of the probability mass of the estimate under the old prior, and the data allow for a precise estimation, so the change in prior does not affect the estimate in any appreciable way.
+
+#### Problem 9M2
+
+Fit the new model.
+
+```{r, warning = FALSE, message = FALSE}
+me9.3 <- ulam(
+    alist(
+        log_gdp_std ~ dnorm( mu , sigma ) ,
+        mu <- a[cid] + b[cid]*( rugged_std - 0.215 ) ,
+        a[cid] ~ dnorm( 1 , 0.1 ) ,
+        b[cid] ~ dexp( 0.3 ) ,
+        sigma ~ dexp( 1 )
+    ) , data = dat_slim, chains = 4, cores = 4, refresh = 0)
+
+precis( me9.3 , depth=2 )
+```
+
+The estimate doesn't change because again he new prior contains almost all of the probability mass of the estimate under the old prior, and the data allow for a precise estimation. However, the number of effective samples is now much lower because the new prior does not allow for an exploration of the whole plausible range of parameter values.
+
+#### Problem 9M3
+
+First, we set the iterations to 2000 with a warmup of 1000. This corresponds to the default behaviour of `ulam` in that the first half of samples is discarded as warmup.
+
+```{r, warning = FALSE, message = FALSE}
+me9.4 <- ulam(
+    alist(
+        log_gdp_std ~ dnorm( mu , sigma ) ,
+        mu <- a[cid] + b[cid]*( rugged_std - 0.215 ) ,
+        a[cid] ~ dnorm( 1 , 0.1 ) ,
+        b[cid] ~ dexp( 0.3 ) ,
+        sigma ~ dexp( 1 )
+    ) , data = dat_slim, chains = 4, cores = 4, iter = 2000, warmup = 1000, refresh = 0)
+
+precis( me9.4 , depth=2 )
+```
+
+Since we have four chains, there is a total of 4000 samples in the posterior chains. `n_eff` and $\hat{R}$ indicate that all went well with these settings. Let's look at the chains.
+
+```{r}
+traceplot(me9.4)
+```
+```{r}
+trankplot(me9.4)
+```
+This all looks fine.
+
+Now let's reduce the warmup to 100. In order to have the same number of samples after warmup as before, we set iterations to 1100.
+
+```{r, message = FALSE, warning = FALSE}
+me9.5 <- ulam(
+    alist(
+        log_gdp_std ~ dnorm( mu , sigma ) ,
+        mu <- a[cid] + b[cid]*( rugged_std - 0.215 ) ,
+        a[cid] ~ dnorm( 1 , 0.1 ) ,
+        b[cid] ~ dexp( 0.3 ) ,
+        sigma ~ dexp( 1 )
+    ) , data = dat_slim, chains = 4, cores = 4, iter = 1100, warmup = 100, refresh = 0)
+
+precis( me9.5 , depth=2 )
+```
+
+`n_eff` has increased for $\alpha$ and decreased for $\beta$. Let's look at the chains.
+
+```{r}
+traceplot(me9.5)
+```
+```{r}
+trankplot(me9.5)
+```
+
+Because of the detrimental effect on `n_eff` for $\beta$, we can say that a warmup of 100 is not enough. By increaseing warmup step by step, we can find the point where `n_eff` stabilizes.
+
+####  🤩🤓 _BONUS!_ Problem 9H1 😎🤩
+
+```{r, warning = FALSE, message = FALSE}
+## R code 9.28
+mp <- ulam(
+    alist(
+        a ~ dnorm(0,1),
+        b ~ dcauchy(0,1)
+    ), data=list(y=1) , chains=1 )
+
+## precis
+precis(mp)
+```
+
+This model samples two chains (to be exact: one two-dimensional chain) from a standard normal distribution $\alpha \sim \mathcal{N}(0, 1)$ and from a standard Cauchy distribution $\beta \sim \text{Cauchy}(0, 1)$. Neither of the two parameter distributions is conditional on any data, so no fitting takes place. Furthermore, the two parameters are sampled independently. So the resulting chain simply represents the joint distribution $p(\alpha, \beta)$ of the two independet parameters $\alpha$ and $\beta$.
+
+```{r}
+traceplot(mp)
+```
+
+The [Cauchy distribution](https://en.wikipedia.org/wiki/Cauchy_distribution) has the following probability density function:
+
+$$
+p(x|x_0, \gamma) = \frac{1}{\pi \gamma \left( 1 + \left( \frac{x - x_0}{\gamma} \right)^2 \right)}
+$$
+
+For the standard Cauchy (with $x_0 = 0$ and $\gamma = 1$, as in the model above), this gives us
+
+$$
+p(x|0,1) = \frac{1}{\pi (1 + x^2)}
+$$
+
+The mean and variance of the Cauchy distribution are undefined. That's why we've used $x_0$ and $\gamma$ as parameters instead of $\mu$ and $\sigma$ because these are usually associated with mean and standard deviation. This explains why the chain for $\beta$ wanders almost aimlessly along the real line and takes very big jumps.
+
