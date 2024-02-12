@@ -12,7 +12,11 @@ The course is based on the textbook *Statistical Rethinking* (2nd edition, 2020)
 <sup>1</sup>McElreath, R. (2020). *Statistical Rethinking: A Bayesian Course with Examples in R and Stan (2nd ed.).* Chapman and Hall/CRC. [doi:10.1201/9780429029608](https://doi.org/10.1201/9780429029608)
 
 
-## Lesson Plan
+## Flipped classroom
+
+We will be using a so-called 'flipped classroom' in this course. This means that you are generally expected to have read the literature and watched the vidoes before coming to the lecture. The purpose of the lecture then is for you to ask questions (the more, the better!) so that we can go over the material again together, deepening and broadening our understanding of it.
+
+## Schedule
 
 | Course week | Week of year | Topics and readings                                                     |
 |:-----------:|:------------:|:------------------------------------------------------------------------|
@@ -27,10 +31,6 @@ The course is based on the textbook *Statistical Rethinking* (2nd edition, 2020)
 | 9           | 18           | Generalized linear models (chapter 11)                                  |
 | 10          | 19           | Mixture models, ordered categorical outcomes/predictors (chapter 12)    |
 | 11          | 20           | Multilevel models (chapter 13)                                          |
-
-## Flipped classroom
-
-We will be using a so-called 'flipped classroom' in this course. This means that you are generally expected to have read the literature and watched the vidoes before coming to the lecture. The purpose of the lecture then is for you to ask questions (the more, the better!) so that we can go over the material again together, deepening and broadening our understanding of it.
 
 ## Slack workspace
 
